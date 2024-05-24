@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css/index.css">
         <link rel="icon" href="" id="favicon">
         <script src="./script/particles.js"></script>
-        <!--script async>
+        <script async>
             // Incognito analytics
             // Only tracks user visits!
             // Remove when needed.
@@ -24,7 +24,7 @@
                 });
     
             })();
-        </script-->
+        </script>
     </head>
     <body>
         <script>
@@ -51,5 +51,119 @@
         <form id="access-form"></form>
         <div class="particles"></div>
         <script src="script/index.js" type="module"></script>
-    </body>
+        <style>
+            body {
+              margin: 0;
+              overflow: hidden;
+            }
+        
+            canvas {
+              position: absolute;
+            }
+        
+            #particle-canvas {
+              position: fixed;
+              top: 0;
+              left: 0;
+              z-index: -1;
+            }
+          </style>
+          </head>
+        
+          <body>
+            <canvas id="particle-canvas"></canvas>
+        
+            <script>
+              // Particle class
+              class Particle {
+                constructor(x, y, radius, speedX, speedY) {
+                  this.x = x;
+                  this.y = y;
+                  this.radius = radius;
+                  this.speedX = speedX;
+                  this.speedY = speedY;
+                  this.originalX = x;
+                  this.originalY = y;
+                }
+        
+                draw(context) {
+                  context.beginPath();
+                  context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                  context.fillStyle = 'white';
+                  context.fill();
+                }
+        
+                update() {
+                  this.x += this.speedX;
+                  this.y += this.speedY;
+                  this.draw(context);
+        
+                  // Wrap particles around the screen edges
+                  if (this.x < 0) {
+                    this.x = canvas.width;
+                  } else if (this.x > canvas.width) {
+                    this.x = 0;
+                  }
+        
+                  if (this.y < 0) {
+                    this.y = canvas.height;
+                  } else if (this.y > canvas.height) {
+                    this.y = 0;
+                  }
+                }
+        
+                connect(particles) {
+                  for (let i = 0; i < particles.length; i++) {
+                    const distance = Math.sqrt(
+                      (this.x - particles[i].x) ** 2 + (this.y - particles[i].y) ** 2
+                    );
+        
+                    if (distance < 100) {
+                      context.beginPath();
+                      context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                      context.lineWidth = 1;
+                      context.moveTo(this.x, this.y);
+                      context.lineTo(particles[i].x, particles[i].y);
+                      context.stroke();
+                      context.closePath();
+                    }
+                  }
+                }
+              }
+        
+              // Create canvas and context
+              const canvas = document.getElementById("particle-canvas");
+              const context = canvas.getContext("2d");
+        
+              // Set canvas dimensions
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+        
+              // Create particles
+              const particles = [];
+              const particleCount = 200; 
+              for (let i = 0; i < particleCount; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = Math.random() * 2 + 1;
+                const speedX = Math.random() * 2 - 1;
+                const speedY = Math.random() * 2 - 1;
+        
+                particles.push(new Particle(x, y, radius, speedX, speedY));
+              }
+        
+              // Animation loop
+              function animate() {
+                requestAnimationFrame(animate);
+                context.clearRect(0, 0, canvas.width, canvas.height);
+        
+                for (let i = 0; i < particles.length; i++) {
+                  particles[i].update();
+                  particles[i].connect(particles.slice(i + 1));
+                }
+              }
+        
+              animate();
+            </script>
+          </body>
 </html>
