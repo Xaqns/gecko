@@ -236,15 +236,18 @@ nav i,
  font-size:14px
 }
 .interactive {
- display:flex;
- flex-grow:1;
- height:42px;
- font-size:14px;
- border:none;
- color:var(--text-color);
- background:inherit;
- outline:none
+  display: flex;
+  flex-grow: 1;
+  height: 42px;
+  font-size: 14px;
+  border: none;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.1); /* semi-transparent white background */
+  backdrop-filter: blur(10px); /* applies the blur effect */
+  outline: none;
+  border-radius: 10px; /* rounded corners */
 }
+
 footer {
  height:80px;
  width:100%;

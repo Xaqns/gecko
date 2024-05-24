@@ -25,6 +25,7 @@
     
             })();
         </script>
+    
     </head>
     <body>
         <script>
@@ -74,7 +75,6 @@
             <canvas id="particle-canvas"></canvas>
         
             <script>
-              // Particle class
               class Particle {
                 constructor(x, y, radius, speedX, speedY) {
                   this.x = x;
@@ -89,7 +89,7 @@
                 draw(context) {
                   context.beginPath();
                   context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-                  context.fillStyle = 'white';
+                  context.fillStyle = 'lightgreen';
                   context.fill();
                 }
         
@@ -98,7 +98,6 @@
                   this.y += this.speedY;
                   this.draw(context);
         
-                  // Wrap particles around the screen edges
                   if (this.x < 0) {
                     this.x = canvas.width;
                   } else if (this.x > canvas.width) {
@@ -131,15 +130,12 @@
                 }
               }
         
-              // Create canvas and context
               const canvas = document.getElementById("particle-canvas");
               const context = canvas.getContext("2d");
         
-              // Set canvas dimensions
               canvas.width = window.innerWidth;
               canvas.height = window.innerHeight;
         
-              // Create particles
               const particles = [];
               const particleCount = 200; 
               for (let i = 0; i < particleCount; i++) {
@@ -152,7 +148,6 @@
                 particles.push(new Particle(x, y, radius, speedX, speedY));
               }
         
-              // Animation loop
               function animate() {
                 requestAnimationFrame(animate);
                 context.clearRect(0, 0, canvas.width, canvas.height);
